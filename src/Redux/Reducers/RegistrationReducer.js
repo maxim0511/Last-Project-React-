@@ -32,8 +32,9 @@ export const SetErrorAC = () => {
     }
 }
 export const Regist = (email,phone,fullname,password,Username) =>async (dispatch) =>{
-    let response = await regAPI.registration(email,phone,fullname,password,Username);
+    
         try {
+            let response = await regAPI.registration(email,phone,fullname,password,Username);
             dispatch(SetAuthAC())
         }
         catch(e){

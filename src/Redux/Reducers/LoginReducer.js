@@ -69,8 +69,9 @@ export const login = (Username,password,) =>async (dispatch) =>{
             const refreshtoken = response.data.allowedGrantTypes[1];
 
             dispatch(SetFirstEntrance(id,Password,refreshtoken,secret));
-             let data = await loginAPI.login(id,Username,password,secret);
+            
              try {
+                let data = await loginAPI.login(id,Username,password,secret);
                  const accesstoken = data.data.access_token;
                  const refreshtoken = data.data.refresh_token;
                  localStorage.setItem('accesstoken',accesstoken);

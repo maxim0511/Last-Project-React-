@@ -53,8 +53,9 @@ export const AddImg = (ImageName,Desc,ImageCategoryNew,ImageCategoryPopular,file
     localStorage.setItem('refreshtoken',refreshToken);
 
 
-    let response = await AddImgAPI.postNewImg(ImageName,Desc,ImageCategoryNew,ImageCategoryPopular,data.data.id);
+    
     try {
+        let response = await AddImgAPI.postNewImg(ImageName,Desc,ImageCategoryNew,ImageCategoryPopular,data.data.id);
         dispatch(SetImageInServerAC())
     }
     catch{
