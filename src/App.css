@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+}
+.App {
+    font-family: 'Gideon Roman', cursive;
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+     width: 100%;
+  }
+  
