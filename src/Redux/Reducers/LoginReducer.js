@@ -66,7 +66,8 @@ export const SetTokenAC = (access_token,refresh_token) => {
 }
 export const login = (Username,password) =>async (dispatch) =>{
     dispatch(SetPreloaderAC(true))
-    let response = await loginAPI.firstEntrance();
+    try{
+        let response = await loginAPI.firstEntrance();
      
             localStorage.clear();
             sessionStorage.clear();
@@ -103,6 +104,11 @@ export const login = (Username,password) =>async (dispatch) =>{
                  dispatch(SetPreloaderAC(false))
                  dispatch(SetErrorAC());
              }
+    }
+    catch{
+        dispatch(SetPreloaderAC(false))
+        dispatch(SetErrorAC());
+    }
 }
 export const logout = ()=> async (dispatch) =>{
     localStorage.clear();

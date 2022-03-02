@@ -68,8 +68,8 @@ export const SetErrorAC = () => {
 
 export const getImgNew =(currentPage ,pageSize)=> async (dispatch) =>{ 
     dispatch(SetPreloaderAC(true))
-    let response= await contentAPI.content(currentPage,pageSize,true,false);
     try{
+        let response= await contentAPI.content(currentPage,pageSize,true,false);
         dispatch(SetImgAC(response.data.data));
         dispatch(SetTotalCountAC(response.data.totalItems));
         dispatch(SetCurrentPage(currentPage));
@@ -83,8 +83,8 @@ export const getImgNew =(currentPage ,pageSize)=> async (dispatch) =>{
 }
 export const getImgPopular =(currentPage ,pageSize)=> async (dispatch) =>{ 
     dispatch(SetPreloaderAC(true))
-    let response= await contentAPI.content(currentPage,pageSize,false,true);
     try{
+        let response= await contentAPI.content(currentPage,pageSize,false,true);
         dispatch(SetImgAC(response.data.data));
         dispatch(SetTotalCountAC(response.data.totalItems));
         dispatch(SetCurrentPage(currentPage));
