@@ -1,45 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./addImg.module.css";
 import Login from "../Account/Auth/Login"
 import NoConnection from "../Error/NoConnection";
 import { Field, reduxForm } from "redux-form";
-import { Input,Textarea } from "../FormControls/FormControls";
+//import { Input,Textarea } from "../FormControls/FormControls";
 import { required } from "../../utils/errors";
 import FieldFileInput from "../FormControls/FormControls";
+import Preloader from "../Preloader/Preloader";
+import { Radio, Upload } from "antd";
+import { Form, Input, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import 'antd/dist/antd.css'; 
 
+const normFile = (e) => {
+    if (Array.isArray(e)) {
+        return e;
+      }
+    
+      return e && e.fileList;
+  };
 
-const addImg = (props) => {
-    const onSubmit = (formData) => {
-        if (formData.ImageCategoryNew == undefined){
-            props.AddImg(formData.ImageName,
-            formData.Desc,
-            formData.ImageCategoryNew = false,
-            formData.ImageCategoryPopular = true,
-            formData.file,
-        )
+const AddImgComponent = (props) => {
+    const onFinish = (values) => {
+        if (values.radio_group == 1) {
+            let New = true;
+            let Popular = false
+            props.AddImg(values,New,Popular)
+        } else {
+            let New = false;
+            let Popular = true
+            props.AddImg(values,New,Popular)
         }
-        if (formData.ImageCategoryPopular == undefined){
-            props.AddImg(formData.ImageName,
-            formData.Desc,
-            formData.ImageCategoryNew = true,
-            formData.ImageCategoryPopular = false,
-            formData.file,
-        )
-        }
-        if (formData.ImageCategoryNew && formData.ImageCategoryPopular) {
-            props.AddImg(formData.ImageName,
-                formData.Desc,
-                formData.ImageCategoryNew = true,
-                formData.ImageCategoryPopular = true,
-                formData.file ,
-            )
-        } 
-        formData.ImageName='';
-        formData.Desc='';
     }
-
     if (!props.isAuth) {
         return <Login/>  
+    }
+    if (props.preloader) {
+        return <Preloader/>
     }
     if (props.error) {
         return  <NoConnection/>
@@ -50,14 +47,39 @@ const addImg = (props) => {
                     <h2 className={style.h2}>Картинка успешно загружена</h2> 
                 </div>}
                 <div className={style.AddImgPage}>
-                    <AddImgPageReduxForm onSubmit={onSubmit} />
+                    <Form  onFinish={onFinish} ><br/>
+                        <Form.Item name="ImageName"  rules={[{required: true, message: 'Please input your Image name!',},]}>        
+                                <Input placeholder="ImageName"  size="large"/>
+                        </Form.Item><br/>
+                        <Form.Item name="radio_group" label="Категория">
+                                <Radio.Group>
+                                    <Radio value="1" >New</Radio>
+                                    <Radio value="2" >Popular</Radio>
+                                </Radio.Group>
+                        </Form.Item>
+                        <Form.Item name="Desc"  rules={[{required: true,message: 'Please input your Description!',},]}>
+                                <Input size="large" placeholder="Description"/>
+                        </Form.Item>
+                        <Form.Item name="file" label="Upload File"  valuePropName="fileList" getValueFromEvent={normFile}>
+                            <Upload listType="picture" name="logo" beforeUpload={(file, fileList)=>false} >
+                            <Button icon={<UploadOutlined />}>Click to upload</Button>
+                            </Upload>
+                        </Form.Item>
+                        <div className={style.buttonContainer}>
+                            <Form.Item>
+                                    <Button type="primary" htmlType="submit" className={style.button}>
+                                        Отправить
+                                    </Button>
+                            </Form.Item>
+                        </div>
+                    </Form>
                 </div>
             </div>
     )
 }
 
 
-const AddImgPageForm = ({handleSubmit}) => {
+/*const AddImgPageForm = ({handleSubmit}) => {
     return (
         <form onSubmit={handleSubmit} className={style.Form}>
             <div className={style.ContainerForm}>
@@ -87,7 +109,7 @@ const AddImgPageForm = ({handleSubmit}) => {
 
 const AddImgPageReduxForm = reduxForm ({
     form:'AddImg'
-})(AddImgPageForm)
+})(AddImgPageForm)*/
  
 
-export default addImg
+export default AddImgComponent

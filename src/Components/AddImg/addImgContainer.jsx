@@ -16,7 +16,8 @@ class AddImgContainer extends React.Component {
 }
 
 let mapStateToProps = (State) => ({
-    isAuth: State.loginPage.isAuth,
+    isAuth:sessionStorage.getItem('Auth'),
+    preloader:State.addImgPage.preloader,
     error:State.loginPage.error,
     ImageAddInServer:State.addImgPage.ImageAddInServer
 });

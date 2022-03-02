@@ -1,15 +1,14 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunkMiddleware from 'redux-thunk';
 import { reducer as formReducer } from 'redux-form'
-import NewReducer from "./Reducers/NewReducer";
-import PopularReducer from "./Reducers/PopularReducer";
 import LoginReducer from "./Reducers/LoginReducer"
 import RegistrationReducer from "./Reducers/RegistrationReducer";
 import AddImgReducer from "./Reducers/AddImg";
+import AllContentReducer from "./Reducers/AllContentReducer";
 
 let Reducers = combineReducers({
-    newPage:NewReducer,
-    popularPage:PopularReducer,
+    newPage:AllContentReducer,
+    popularPage:AllContentReducer,
     loginPage:LoginReducer,
     regPage:RegistrationReducer,
     addImgPage:AddImgReducer,

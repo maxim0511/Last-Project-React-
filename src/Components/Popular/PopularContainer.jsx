@@ -2,8 +2,8 @@ import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import {
     SetCurrentPage,
-    getImg
-} from "../../Redux/Reducers/PopularReducer";
+    getImgPopular
+} from "../../Redux/Reducers/AllContentReducer";
 import { compose } from "redux";
 import Preloader from "../Preloader/Preloader";
 
@@ -11,15 +11,16 @@ const PopularPage = React.lazy(()=>import('./Popular'))
 
 class PopularContainer extends React.Component {
     componentDidMount() {
-        this.props.getImg(this.props.currentPage, this.props.pageSize);
+        this.props.getImgPopular(1, this.props.pageSize);
     }
-    onPageChanged= (PageNumber) => {
-        this.props.getImg(PageNumber, this.props.pageSize);
+    onPageChanged= (Page) => {
+        this.props.getImgPopular(Page, this.props.pageSize);
     }
     render () {
         return (
             <Suspense fallback={<Preloader/>}>
                 <PopularPage
+                     preloader={this.props.preloader}
                     totalItems={this.props.totalItems}
                     pageSize={this.props.pageSize}
                     currentPage={this.props.currentPage}
@@ -33,6 +34,7 @@ class PopularContainer extends React.Component {
 }
 
 let mapStateToProps = (state) => ({
+    preloader:state.popularPage.preloader,
     isAuth: state.loginPage.isAuth,
     img:state.popularPage.img,
     pageSize:state.popularPage.pageSize,
@@ -43,5 +45,5 @@ let mapStateToProps = (state) => ({
 
 export default compose(connect(mapStateToProps,{
     SetCurrentPage,
-    getImg
+    getImgPopular
 }))(PopularContainer)

@@ -1,9 +1,11 @@
-import {contentAPI} from '../../API/api'
+import {contentAPI} from '../../API/api';
+
 
 const Set_Img= "SET_IMG"
 const Set_Current_Page= "SET_CURRENT_PAGE";
 const Set_Total_Count="SET_TOTAL_COUNT";
-const Set_Error = "SET_ERROR"
+const Set_Error = "SET_ERROR";
+const SET_PRELOADER = "SET_PRELOADER"
 
 let InitialState = {
    img:[],
@@ -11,9 +13,10 @@ let InitialState = {
    totalItems:0,
    currentPage:1,
    error:false,
+   preloader:false,
 };
 
-const PopularReducer = (State = InitialState,action) => {
+const AllContentReducer = (State = InitialState,action) => {
     switch (action.type) {
         case Set_Img : 
             return {...State, img:action.img};
@@ -25,12 +28,19 @@ const PopularReducer = (State = InitialState,action) => {
             return {...State, totalItems: action.count}
         ;
         case Set_Error:
-            return {...State, error:action.error}
+            return {...State, error:action.error};
+        case SET_PRELOADER :
+            return {...State,preloader:action.preloader}    
         default:
             return State;
     }
 } 
-
+export const SetPreloaderAC = (preloader) => {
+    return {
+        type:SET_PRELOADER,
+        preloader
+    }
+}
 export const SetImgAC = (img) => {
     return {
         type:Set_Img,
@@ -55,20 +65,36 @@ export const SetErrorAC = () => {
         error:true
     }
 }
-export const getImg =(currentPage,pageSize)=> async (dispatch) =>{ 
-    let New=false;
-    let Popular=true;
-    let response= await contentAPI.content(currentPage,pageSize,New,Popular);
+
+export const getImgNew =(currentPage ,pageSize)=> async (dispatch) =>{ 
+    dispatch(SetPreloaderAC(true))
+    let response= await contentAPI.content(currentPage,pageSize,true,false);
     try{
         dispatch(SetImgAC(response.data.data));
         dispatch(SetTotalCountAC(response.data.totalItems));
         dispatch(SetCurrentPage(currentPage));
-
+        dispatch(SetPreloaderAC(false))
     }
     catch(e){
+        dispatch(SetPreloaderAC(false))
+        dispatch(SetErrorAC());
+    }
+     
+}
+export const getImgPopular =(currentPage ,pageSize)=> async (dispatch) =>{ 
+    dispatch(SetPreloaderAC(true))
+    let response= await contentAPI.content(currentPage,pageSize,false,true);
+    try{
+        dispatch(SetImgAC(response.data.data));
+        dispatch(SetTotalCountAC(response.data.totalItems));
+        dispatch(SetCurrentPage(currentPage));
+        dispatch(SetPreloaderAC(false))
+    }
+    catch(e){
+        dispatch(SetPreloaderAC(false))
         dispatch(SetErrorAC());
     }
      
 }
 
-export default PopularReducer;
+export default AllContentReducer;

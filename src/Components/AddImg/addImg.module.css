@@ -1,50 +1,16 @@
-.Form {
-    height: 66vh;
+
+.AddImgPage {
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-}
-.ContainerForm {
-    text-align: center;
-    padding: 20px;
-    background-color: white;
-    border: 2px dashed grey;
-}
-.NameImgInput {
-    height: 4vh;
-    width: 100%;
-    font-size: 17px;
-}
-.p{
-    color:#ED5992;
-    font-weight: bold;
-    font-size: 25px;
-}
-.category {
-    display: flex;
-    margin-top: 5%;
-    justify-content: center;
-    gap:10px;
-    height: 30px;
-}
-.Desc {
-    margin-top: 5%;
-}
-.DescText {
-    width: 100%;
-    height: 7vh;
-    font-size: 17px;
-}
-.ImgInputCont {
-    margin-top: 5%;
-}
-.ImgInput {
-    font-size: 17px;
-    margin-left: 9%;
+    margin:0 auto;
+    width: 20%;
+    margin-top: 6%;
 }
 .button {
     width: 120px;
+    margin-left: 50px;
     height: 40px;
     border: 0px;
     color: white;
@@ -55,7 +21,6 @@
     transition: 0.5s;
 }
 .button:hover {
-    font-size: 20px;
     cursor: pointer;
     transition: 0.5s;
 }

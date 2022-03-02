@@ -4,6 +4,7 @@ const SET_FIRST_ENTRANCE= 'login/SET_FIRST_ENTRANCE'
 const Set_Error = "SET_ERROR"
 const SET_USERS_DATA = "SET_USERS_DATA"
 const SET_TOKEN = "SET_TOKEN"
+const SET_PRELOADER = "SET_PRELOADER"
 
 let InitialState = {
     id:null,
@@ -12,6 +13,7 @@ let InitialState = {
     secret:null,
     access_token:null,
     refresh_token:null,
+    preloader:false,
     isAuth:false,
     error:false,
 }
@@ -25,11 +27,18 @@ const loginReducer  = (State=InitialState, action) => {
             return {...State, isAuth:action.isAuth}
         case SET_TOKEN :
             return {...State, access_token:action.access_token , refresh_token:action.refresh_token}
+        case SET_PRELOADER :
+            return {...State,preloader:action.preloader}
         default :
             return State
     }
 }
-
+export const SetPreloaderAC = (preloader) => {
+    return {
+        type:SET_PRELOADER,
+        preloader
+    }
+}
 export const SetFirstEntrance = (id,secret,password,refresh_token) => {
     return {
         type:SET_FIRST_ENTRANCE,
@@ -55,10 +64,12 @@ export const SetTokenAC = (access_token,refresh_token) => {
         refresh_token
     }
 }
-export const login = (Username,password,) =>async (dispatch) =>{
+export const login = (Username,password) =>async (dispatch) =>{
+    dispatch(SetPreloaderAC(true))
     let response = await loginAPI.firstEntrance();
      
             localStorage.clear();
+            sessionStorage.clear();
             const id=response.data.id + '_' + response.data.randomId;
             localStorage.setItem('IdClient',id);
             const idPers = response.data.id
@@ -76,11 +87,12 @@ export const login = (Username,password,) =>async (dispatch) =>{
                  const refreshtoken = data.data.refresh_token;
                  localStorage.setItem('accesstoken',accesstoken);
                  localStorage.setItem('refreshtoken',refreshtoken);
-                 dispatch(SetTokenAC(accesstoken,refreshtoken))
-                dispatch(SetAuthAC(true))
+                 sessionStorage.setItem('Auth',true);
+                 dispatch(SetTokenAC(accesstoken,refreshtoken));
+                 dispatch(SetPreloaderAC(false))
+                dispatch(SetAuthAC(sessionStorage.getItem('Auth')));
              }
              catch(e){
-                 dispatch(SetErrorAC());
                  localStorage.clear();
                  let tokens = await tokenAPI.getNewToken(idPers,refreshtoken,secret);
                  let accessToken = tokens.data.access_token;
@@ -88,6 +100,7 @@ export const login = (Username,password,) =>async (dispatch) =>{
                  dispatch(SetTokenAC(accessToken,refreshToken));
                  localStorage.setItem('accesstoken',accessToken);
                  localStorage.setItem('refreshtoken',refreshToken);
+                 dispatch(SetPreloaderAC(false))
                  dispatch(SetErrorAC());
              }
 }

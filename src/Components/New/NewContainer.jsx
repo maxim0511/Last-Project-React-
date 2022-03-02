@@ -2,8 +2,8 @@ import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import {
     SetCurrentPage,
-    getImg
-} from "../../Redux/Reducers/NewReducer";
+    getImgNew
+} from "../../Redux/Reducers/AllContentReducer";
 import { compose } from "redux";
 import Preloader from "../Preloader/Preloader";
 
@@ -12,16 +12,17 @@ const NewPage = React.lazy(()=>import('./New'))
 
 class NewContainer extends React.Component {
     componentDidMount() {
-        this.props.getImg(this.props.currentPage, this.props.pageSize);
+        this.props.getImgNew(1, this.props.pageSize);
     }
     onPageChanged= (PageNumber) => {
-        this.props.getImg(PageNumber, this.props.pageSize);
+        this.props.getImgNew(PageNumber, this.props.pageSize);
     }
     render () {
         return (
             <Suspense fallback={<Preloader/>}>
                 <NewPage
                     totalItems={this.props.totalItems}
+                    preloader={this.props.preloader}
                     pageSize={this.props.pageSize}
                     currentPage={this.props.currentPage}
                     onPageChanged={this.onPageChanged}
@@ -34,7 +35,7 @@ class NewContainer extends React.Component {
 }
 
 let mapStateToProps = (state) => ({
-    isAuth: state.loginPage.isAuth,
+    preloader:state.newPage.preloader,
     img:state.newPage.img,
     pageSize:state.newPage.pageSize,
     totalItems:state.newPage.totalItems,
@@ -44,6 +45,6 @@ let mapStateToProps = (state) => ({
 export default compose(
     connect(mapStateToProps,{
         SetCurrentPage,
-        getImg
+        getImgNew
     }),
 )(NewContainer)

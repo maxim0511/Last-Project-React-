@@ -56,12 +56,12 @@ export const AddImgAPI = {
                 }
         )
     },
-    postNewImg (ImageName,Desc,ImageCategoryNew,ImageCategoryPopular,idFile) {
+    postNewImg (nameImg,description,New,Popular,idFile) {
         const data={
-            'name':ImageName,
-            'description':Desc,
-            'new':ImageCategoryNew,
-            'popular':ImageCategoryPopular,
+            'name':nameImg,
+            'description':description,
+            'new':New,
+            'popular':Popular,
             image:`/api/media_objects/${idFile}`
             };
         return instance.post(`api/photos`,
